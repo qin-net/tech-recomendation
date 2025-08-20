@@ -19,7 +19,7 @@ app.config.from_object(Config)
 # 初始化OpenAI客户端（用于设备评分功能）
 openai_client = OpenAI(
     api_key=Config.DEEPSEEK_API_KEY,
-    base_url=Config.DEEPSEEK_API_URL
+    base_url="https://api.deepseek.com"
 )
 
 # ===== 产品推荐功能 =====
