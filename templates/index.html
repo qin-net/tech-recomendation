@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI电子设备分析平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #f5f7fa;
+            --dark: #2c3e50;
+            --light-blue: #e3f2fd;
+            --gradient-start: #3498db;
+            --gradient-end: #8e44ad;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* 顶部导航栏 */
+        .navbar {
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0 20px;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            margin-right: 12px;
+            color: var(--accent);
+            font-size: 2rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+            position: relative;
+        }
+        
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .nav-links i {
+            margin-right: 8px;
+            font-size: 1.3rem;
+        }
+        
+        /* 主视觉区域 */
+        .hero-section {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 120px 0 100px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.4rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        /* 功能板块区域 */
+        .features-section {
+            padding: 100px 0;
+        }
+        
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 80px;
+        }
+        
+        .section-title {
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-header {
+            padding: 30px 30px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+        }
+        
+        .feature-icon i {
+            font-size: 1.8rem;
+            color: white;
+        }
+        
+        .feature-title {
+            font-size: 1.6rem;
+            color: var(--secondary);
+        }
+        
+        .feature-content {
+            padding: 30px;
+        }
+        
+        .feature-description {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+        
+        .feature-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        .feature-list li {
+            padding: 10px 0;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .feature-list li:before {
+            content: '\f00c';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--primary);
+            margin-right: 10px;
+            margin-top: 5px;
+        }
+        
+        .feature-image {
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .feature-image:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+        }
+        
+        .feature-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            color: white;
+            z-index: 2;
+        }
+        
+        .feature-overlay h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+        
+        /* 产品优势区域 */
+        .benefits-section {
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f7ff 100%);
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .benefits-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .benefits-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .benefits-title {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 30px;
+        }
+        
+        .benefits-description {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+        
+        .benefits-list {
+            list-style: none;
+        }
+        
+        .benefits-list li {
+            padding: 15px 0;
+            display: flex;
+            align-items: flex-start;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .benefits-list li:before {
+            content: '\f135';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--primary);
+            margin-right: 15px;
+            font-size: 1.2rem;
+            margin-top: 5px;
+        }
+        
+        .benefits-image {
+            position: relative;
+            height: 500px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .benefits-image-content {
+            color: white;
+            text-align: center;
+            padding: 30px;
+            z-index: 2;
+        }
+        
+        .benefits-image-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .benefits-image-text {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        /* 底部区域 */
+        .footer {
+            background: var(--secondary);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 70px 0 30px;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .footer-col h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .footer-col h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--accent);
+        }
+        
+        .footer-col p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .footer-links i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 40px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .benefits-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links li {
+                margin-left: 15px;
+            }
+            
+            .nav-links a {
+                padding: 10px 15px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links a span {
+                display: none;
+            }
+            
+            .nav-links a i {
+                margin-right: 0;
+                font-size: 1.3rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 2.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-microchip"></i>
+                <span>AI设备分析平台</span>
+            </div>
+            <ul class="nav-links">
+                <li>
+                    <a href="http://127.0.0.1:5000/analysis" >
+                        <i class="fas fa-lightbulb"></i>
+                        <span>智能分析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://127.0.0.1:5000/recommend">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>智能推荐</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="introduction">
+                        <i class="fas fa-server"></i>
+                        <span>硬件介绍</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- 主视觉区域 -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">专业电子设备AI分析平台</h1>
+            <p class="hero-subtitle">基于DeepSeek人工智能技术，提供专业、全面的电子设备性能分析与评估，帮助您做出明智的选择</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn btn-primary">
+                    <i class="fas fa-play-circle"></i> 开始体验
+                </a>
+                <a href="#features" class="btn btn-secondary">
+                    <i class="fas fa-info-circle"></i> 了解更多
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 功能板块区域 -->
+    <section id="features" class="features-section">
+        <div class="section-header">
+            <h2 class="section-title">核心功能</h2>
+            <p class="section-subtitle">AI电子设备分析平台提供三大核心功能，全面覆盖您的设备评估需求，为您提供专业的数据支持和决策依据</p>
+        </div>
+        
+        <div class="features-grid">
+            <!-- 功能1：AI智能分析 -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="feature-title">AI智能分析</h3>
+                </div>
+                <div class="feature-content">
+                    <p class="feature-description">基于DeepSeek AI大模型，对电子设备进行多维度深度分析，生成专业评估报告。</p>
+                    <ul class="feature-list">
+                        <li>全面评估设备六大核心性能指标</li>
+                        <li>生成详细的性能分析报告</li>
+                        <li>提供设备优化建议和使用指南</li>
+                        <li>历史分析数据对比功能</li>
+                        <li>导出专业PDF评估报告</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 功能2：AI智能推荐 -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="feature-title">AI智能推荐</h3>
+                </div>
+                <div class="feature-content">
+                    <p class="feature-description">根据您的使用需求和偏好，智能推荐最适合的电子设备。</p>
+                    <ul class="feature-list">
+                        <li>个性化设备推荐引擎</li>
+                        <li>基于使用场景的精准匹配</li>
+                        <li>价格与性能的平衡推荐</li>
+                        <li>同类产品横向对比功能</li>
+                        <li>新品上市第一时间提醒</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 功能3：硬件介绍 -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3 class="feature-title">硬件百科</h3>
+                </div>
+                <div class="feature-content">
+                    <p class="feature-description">全面的硬件知识库，详细介绍各类电子设备的参数和技术细节。</p>
+                    <ul class="feature-list">
+                        <li>超过1000种硬件详细参数</li>
+                        <li>最新硬件技术深度解析</li>
+                        <li>硬件性能天梯图</li>
+                        <li>硬件选购指南</li>
+                        <li>硬件故障排查与解决方案</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 产品优势区域 -->
+    <section class="benefits-section">
+        <div class="benefits-container">
+            <div class="benefits-content">
+                <h2 class="benefits-title">为什么选择我们的平台</h2>
+                <p class="benefits-description">AI电子设备分析平台结合前沿人工智能技术与行业专业知识，为您提供最可靠、最全面的设备评估服务。</p>
+                
+                <ul class="benefits-list">
+                    <li>
+                        <strong>专业分析模型</strong> - 基于深度学习的专业分析模型，准确率高达95%
+                    </li>
+                    <li>
+                        <strong>海量设备数据库</strong> - 收录超过10,000款电子设备详细参数
+                    </li>
+                    <li>
+                        <strong>实时市场数据</strong> - 整合最新市场价格和用户评价数据
+                    </li>
+                    <li>
+                        <strong>多维度评估</strong> - 从性能、价格、使用体验等多角度全面评估
+                    </li>
+                    <li>
+                        <strong>持续更新</strong> - 模型和数据库每周更新，保持行业领先
+                    </li>
+                    <li>
+                        <strong>跨平台支持</strong> - 支持手机、平板、电脑等多设备访问
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="benefits-image">
+                <div class="benefits-image-content">
+                    <h3 class="benefits-image-title">精准分析 · 智能推荐</h3>
+                    <p class="benefits-image-text">使用AI技术帮助您从海量设备中找到最适合的选择</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 底部区域 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>关于我们</h3>
+                <p>AI电子设备分析平台致力于通过人工智能技术，为用户提供专业、客观的电子设备评估服务，帮助消费者做出明智的购买决策。</p>
+                <p>我们的使命是消除电子设备购买过程中的信息不对称，让科技选择变得更简单。</p>
+            </div>
+            
+            <div class="footer-col">
+                <h3>核心功能</h3>
+                <ul class="footer-links">
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i> AI智能分析
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i> 智能设备推荐
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i> 硬件百科
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i> 设备对比
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i> 性能测试
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>热门设备分类</h3>
+                <ul class="footer-links">
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-mobile-alt"></i> 智能手机
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-laptop"></i> 笔记本电脑
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-tablet-alt"></i> 平板电脑
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-tv"></i> 智能电视
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-camera"></i> 数码相机
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>联系我们</h3>
+                <ul class="footer-links">
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-envelope"></i> contact@aidevice.com
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-phone"></i> 400-888-9999
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fab fa-weixin"></i> 微信公众号
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fab fa-weibo"></i> 官方微博
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-map-marker-alt"></i> 北京市海淀区科技园区
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            © 2025 AI电子设备分析平台 | 基于DeepSeek API | 专业设备性能分析系统
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电子设备配置参考网站</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #f5f7fa;
+            --dark: #2c3e50;
+            --light-blue: #e3f2fd;
+            --gradient-start: #3498db;
+            --gradient-end: #8e44ad;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --border-radius: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* 顶部导航栏 */
+        .navbar {
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0 20px;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            margin-right: 12px;
+            color: var(--accent);
+            font-size: 2rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+            position: relative;
+        }
+        
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .nav-links i {
+            margin-right: 8px;
+            font-size: 1.3rem;
+        }
+        
+        /* 主内容区 */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: linear-gradient(120deg, #ffffff 0%, #f8f9ff 100%);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+        
+        header h1 {
+            color: var(--primary);
+            margin-top: 0;
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            color: var(--dark);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .main-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .tab {
+            padding: 15px 30px;
+            background-color: var(--light);
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: var(--transition);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            color: var(--dark);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tab::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 0;
+        }
+        
+        .tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        
+        .tab:hover::before {
+            opacity: 0.1;
+        }
+        
+        .tab.active {
+            background: linear-gradient(120deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 6px 12px rgba(67, 97, 238, 0.3);
+        }
+        
+        .tab.active::before {
+            opacity: 0;
+        }
+        
+        h1 {
+            color: var(--primary);
+        }
+        
+        h2 {
+            text-align: center;
+            color: var(--secondary);
+            margin-bottom: 25px;
+            font-size: 2rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+        
+        h3 {
+            color: var(--secondary);
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        h4 {
+            color: var(--dark);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        
+        .series-container {
+            background: linear-gradient(120deg, #ffffff 0%, #f8f9ff 100%);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 35px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .series-header {
+            text-align: center;
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .series-title {
+            color: var(--secondary);
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        
+        .components-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin: 25px 0;
+        }
+        
+        .component-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            background: linear-gradient(120deg, #ffffff 0%, #fafbff 100%);
+            transition: var(--transition);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .component-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 0;
+        }
+        
+        .component-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        .component-card:hover::before {
+            opacity: 0.03;
+        }
+        
+        .image-container {
+            flex: 0 0 30%;
+            margin-right: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .text-container {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .text-container p {
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+        
+        .component-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .component-image:hover {
+            transform: scale(1.03);
+        }
+        
+        .cpu-section {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            gap: 25px;
+        }
+        
+        .cpu-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .cpu-right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .cpu-ladder-image {
+            width: 100%;
+            max-width: 600px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .cpu-ladder-image:hover {
+            transform: scale(1.02);
+        }
+        
+        .selection-guide {
+            background: linear-gradient(120deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .selection-guide ul {
+            padding-left: 20px;
+        }
+        
+        .selection-guide li {
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            color: var(--dark);
+            font-size: 1rem;
+            background: linear-gradient(120deg, #ffffff 0%, #f8f9ff 100%);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        footer p {
+            margin: 5px 0;
+        }
+        
+        /* 动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .cpu-section {
+                flex-direction: column;
+            }
+            
+            .cpu-left {
+                margin-right: 0;
+                margin-bottom: 25px;
+            }
+            
+            .component-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .image-container {
+                margin-right: 0;
+                margin-bottom: 20px;
+                flex: none;
+            }
+            
+            .text-container {
+                flex: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            header {
+                padding: 20px 15px;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .main-tabs {
+                gap: 10px;
+            }
+            
+            .tab {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+            
+            .series-container {
+                padding: 20px;
+            }
+            
+            .components-container {
+                gap: 20px;
+            }
+            
+            .component-card {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            header {
+                padding: 15px 10px;
+            }
+            
+            header h1 {
+                font-size: 1.7rem;
+            }
+            
+            .main-tabs {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .tab {
+                width: 100%;
+                padding: 15px;
+            }
+            
+            .series-container {
+                padding: 15px;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            h3 {
+                font-size: 1.3rem;
+            }
+            
+            .component-card {
+                padding: 15px;
+            }
+            
+            .cpu-ladder-image {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-microchip"></i>
+                <span>AI设备分析平台</span>
+            </div>
+            <ul class="nav-links">
+                <li>
+                    <a href="http://127.0.0.1:5000/analysis">
+                        <i class="fas fa-brain"></i>
+                        <span>智能分析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://127.0.0.1:5000/recommend" >
+                        <i class="fas fa-lightbulb"></i>
+                        <span>智能推荐</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="active">
+                        <i class="fas fa-server"></i>
+                        <span>硬件介绍</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <header>
+            <h1>📱📱 电子设备配置指南</h1>
+            <p>为您提供详细、易懂的电子设备配置信息，帮助您轻松选择适合的设备</p>
+        </header>
+        
+        <div class="main-tabs">
+            <div class="tab-container">
+                <button class="tab" onclick="switchTab('phone-guide')">📱📱 了解手机配置</button>
+            </div>
+            
+            <div class="tab-container">
+                <button class="tab" onclick="switchTab('laptop-guide')">💻💻 了解电脑配置</button>
+            </div>
+        </div>
+        
+        <!-- 了解手机配置区域 -->
+        <div id="phone-guide-section" class="series-container" style="display: block;">
+            <div class="series-header">
+                <h2 class="series-title">📱📱 了解手机配置</h2>
+            </div>
+            <p>在这里您可以了解手机各个硬件组件的作用和重要性：</p>
+            
+            <h3>主要硬件组件介绍</h3>
+            <div class="components-container">
+                <div class="component-card cpu-section">
+                    <div class="cpu-left">
+                        <div class="image-container">
+                            
+                        </div>
+                        <div class="text-container">
+                            <h4>⚙⚙️ 处理器(CPU)</h4>
+                            <p>手机的"大脑"，负责处理各种计算任务，影响运行速度和性能。它是手机性能的核心，集成了 CPU、GPU、AI处理单元、ISP（图像信号处理器）以及其他硬件模块。它的性能决定了手机的运算速度、图形渲染能力、图像处理及对人工智能任务的处理效率。</p>
+                            <p>👉 右侧为cpu天梯图</p>    
+                        </div>
+                    </div>
+                    <div class="cpu-right">
+                         <img src="../assets/手机cpu天梯图.jpg" alt="手机CPU天梯图" class="cpu-ladder-image">
+
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <div class="image-container">
+                        <img src="../assets/处理器.png" alt="手机处理器示意图" class="component-image">
+                    </div>
+                    <div class="text-container">
+                        <h4>💾💾 内存(RAM)——多任务处理的保障</h4>
+                        <p>它主要是计算和软件运行数据用的，运行内存越大后台可以运行的软件就越多，但也要看处理器的内存类型和速度。
+这个和系统也有一定关系。
+安卓系统的处理机制是应用在后台时是不会关闭的，只有内存不足才会清除一部分应用。而苹果系统的处理机制是应用在后台时，它在内存中处于冷冻状态，保留镜像（即退出之前的画面），占击该程序，则重新激活；
+安卓系统开源，每个厂家都可以定制系统，导致越来越大，运行的时候系统都占不少；
+还有就是安卓应用不通过应用市场也可以安装，有些 App 不注重内存优化。
+所以如果是要使用2-3年或者更久的建议12GB起步。</p>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <div class="image-container">
+                          <img src="../assets/内存.jpg" alt="手机内存示意图" class="component-image">
+                  
+                    </div>
+                    <div class="text-container">
+                        <h4>💿💿 存储空间(ROM)——存放数据的核心</h4>
+                        <p>永久存储数据、应用程序和系统文件的空间。</p>
+                        <p>📌📌 推荐256G以上，游戏、摄影爱好者可考虑512G及以上</p>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <div class="image-container">
+                         <img src="../assets/屏幕.png" alt="手机屏幕示意图" class="component-image">
+
+                    </div>
+                    <div class="text-container">
+                        <h4>🖥🖥🖥️ 屏幕</h4>
+                        <p>显示内容的组件，尺寸、分辨率和材质影响视觉体验。</p>
+                        <p>· 分辨率 ：在相同的屏幕尺寸下，分辨率越高，显示越清晰。目前以 1080P 的较多，当然还有 720P、1.5K、2K、4K 的其他分辨率手机。</p>
+                        <p>· 刷新率 ：指 1s 内画面刷新的次数。刷新率越高，所显示的画面稳定性就越好。比较常见的就是 60Hz、90Hz、120Hz、144Hz，一般为了更高的游戏体验，会选择高刷新率的手机</p>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <div class="image-container">
+                        <img src="../assets/摄像头.jpg" alt="手机摄像头示意图" class="component-image">
+                    
+                    </div>
+                    <div class="text-container">
+                        <h4>📸📸 摄像头</h4>
+                        <p>· 像素:同类型的摄像头一般都是像素越高越好，像素越高，生成的图片也就越大(ps:所以手机内存也必须要大了)。</p>
+                        <p>· 镜头：有广角、超广角、长焦、微距、景深、人像、潜望、黑白等</p>
+                        <p>· 光学防抖：是一种减少或消除相机抖动影响的技术。通过在镜头或传感器上安装一个小型的机械组件，光学防抖能够在拍摄时自动调整镜头或传感器的角度，抵消手持设备的震动，从而提高图像的清晰度，尤其在拍摄低光环境或长曝光照片时效果更为显著</p>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <div class="image-container">
+                         <img src="../assets/电池.jpg" alt="手机电池示意图" class="component-image">
+                       
+                    </div>
+                    <div class="text-container">
+                        <h4>🔋🔋 电池</h4>
+                        <p>提供电力支持，容量越大通常续航越久。</p>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <div class="image-container">
+                       <img src="../assets/充电速率.jpg" alt="充电速率示意图" class="component-image">
+
+                    </div>
+                    <div class="text-container">
+                        <h4>⚡⚡ 充电速率</h4>
+                        <p>通常为有线充电速率，部分机型支持无线充电</p>
+                        <p>📌📌 一般速度越大充电时间越短，但可能发热问题严重。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 如何选择适合自己的手机 -->
+            <div id="phone-selection-guide" class="selection-guide">
+                <h3>🎯🎯 如何选择适合自己的手机</h3>
+                <p>选择手机时应根据个人需求考虑：</p>
+                <ul>
+                    <li>💰 预算范围</li>
+                    <li>🎮🎮 主要用途（游戏、拍照、办公等）</li>
+                    <li>📱📱 品牌偏好</li>
+                    <li>📏📏 屏幕尺寸要求</li>
+                    <li>🔋🔋 电池续航需求</li>
+                    <li>📷📷 拍照质量要求</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 了解电脑配置区域 -->
+        <div id="laptop-guide-section" class="series-container">
+            <div class="series-header">
+                <h2 class="series-title">💻💻 了解电脑配置</h2>
+            </div>
+            <p>在这里您可以了解笔记本电脑各个硬件组件的作用和重要性：</p>
+
+            <h3>主要硬件组件介绍</h3>
+            <div class="components-container">
+
+                <!-- 处理器(CPU) -->
+                <div class="component-card cpu-section">
+                    <div class="cpu-left">
+                        <div class="image-container">
+                            <img src="../assets/电脑cpu.png" alt="电脑处理器示意图" class="component-image">
+                        </div>
+                        <div class="text-container">
+                            <h4>⚙⚙️ 处理器(CPU)</h4>
+                            <p>·功能：CPU 是笔记本电脑的"大脑"，负责执行计算机程序中的指令。它影响到电脑的整体性能，包括运行程序、处理数据等。</p>
+                            <p>·常见品牌：Intel、AMD是目前主流的 CPU 品牌。一般而言，Inter更稳定，而AMD更实惠。</p>
+                            <p>·适用场景：</p>
+                            <p>办公：Intel Core i5 或 AMD Ryzen 5。</p>
+                            <p>游戏：Intel Core i7 或 AMD Ryzen 7 及以上。</p>
+                            <p>高性能工作（如视频剪辑、3D 渲染）：Intel Core i9 或 AMD Ryzen 9。</p>
+                            <p>👉 比较方法：右侧Intel和AMD品牌cpu天梯图</p>
+                        </div>
+                    </div>
+                    <div class="cpu-right">
+                        <img src="../assets/电脑cpu天梯图.png" alt="电脑CPU天梯图" class="cpu-ladder-image">
+                    </div>
+                </div>
+
+                <!-- 内存(RAM) -->
+                <div class="component-card">
+                    <div class="text-container">
+                        <h4>💾💾 内存(RAM)</h4>
+                        <p>与手机内存类似，临时存储正在运行的程序和数据，越大能同时处理的任务越多。一般建议至少8GB，游戏或专业应用建议16GB或更高。</p>
+                    </div>
+                </div>
+
+                <!-- 硬盘存储 -->
+                <div class="component-card">
+                    <div class="text-container">
+                        <h4>💿💿 硬盘存储</h4>
+                        <p>永久存储数据、程序和操作系统。分为机械硬盘(HDD)和固态硬盘(SSD)，SSD速度更快但价格较高。</p>
+                        <p>📌📌 根据预算可以买稍微大点的，毕竟如果不爱清理磁盘的话，用久了缓存多，很占地方。</p>
+
+                    </div>
+                </div>
+
+                <!-- 显卡(GPU) -->
+                <div class="component-card">
+                    <div class="image-container">
+                         <img src="../assets/显卡.png" alt="显卡示意图" class="component-image">
+                    </div>
+                    <div class="text-container">
+                        <h4>🎮🎮 显卡(GPU)</h4>
+                        <p>处理图形显示任务，对游戏、视频编辑、3D建模等图形密集型应用很重要。分为集成显卡和独立显卡。</p>
+                        <p>集成显卡（集显）通常是与CPU集成在一起的，不具备独立的显存，而是使用计算机的主内存。适合日常办公、网页浏览等轻度应用。</p>
+                        <p>独立显卡（独显）拥有自己的显存和显卡处理器，不依赖CPU的计算能力，因此能提供更高的图形处理性能。独显更适合处理图形密集型的任务，如高级游戏、3D建模和视频编辑。它能够处理更复杂的图形任务，支持更高的显示分辨率和更复杂的图形效果，为用户带来更为流畅和细腻的视觉体验。</p>
+                        <p>· 显卡建议</p>
+                        <p>如果是工作上作用：</p>
+                        <p>日常办公、轻度娱乐：集成显卡。</p>
+                        <p>游戏、设计、视频剪辑：独立显卡，尤其是 NVIDIA GeForce RTX 系列。</p>
+                        <p>如果是游戏端使用：</p>
+                        <p>如果是中低端游戏要求，那么选1650显卡就可以；</p>
+                        <p>如果是中端游戏要求，那么选1650ti、1660TI显卡就可以；</p>
+                        <p>如果是中高游戏端游戏要求，那么选2060/2070显卡就可以；</p>
+                        <p>如果是更高级别游戏要求，那么选2070-MaxQ/2080-MaxQ显卡就可以</p>
+                    </div>
+                </div>
+
+                <!-- 屏幕 -->
+                <div class="component-card">
+                    <div class="image-container">
+                        <img src="../assets/14和16.jpg" alt="笔记本电脑屏幕示意图" class="component-image">
+                    </div>
+                    <div class="text-container">
+                        <h4>🖥🖥🖥️ 屏幕</h4>
+                        <p>显示内容的组件，尺寸、分辨率、色域和刷新率影响视觉体验。</p>
+                        <p>·分辨率：决定屏幕的清晰度。</p>
+                        <p>·刷新率：屏幕每秒钟刷新多少次，较高的刷新率（如 120Hz、144Hz、240Hz）对于游戏和动画工作流非常重要。</p>
+                        <p>·屏幕尺寸：常见的有14、16英寸等尺寸。</p>
+                        <p>14寸：屏幕较小，但分辨率高，画面通透，适合轻度办公及娱乐。重量较小，便于携带。但键盘布局紧凑，没有数字小键盘。散热能力较差</p>
+                        <p>16寸：屏幕大观感好，散热系统更高效，配备小键盘，操作精准度更高。</p>
+                    </div>
+                </div>
+
+                <!-- 电池 -->
+                <div class="component-card">
+                    <div class="text-container">
+                        <h4>🔋🔋 电池和续航</h4>
+                        <p>电池：提供移动办公的电力支持，容量影响续航时间。通常用 Wh（瓦时） 来表示，容量越大，续航时间通常越长，CPU、显卡和其他硬件的功耗也决定电池的使用时长。</p>
+                        <p>续航：决定了你在没有充电的情况下使用笔记本的时间</p>
+                        <p>·建议：</p>
+                        <p>日常办公、出差旅行：至少 8 小时以上续航。</p>
+                        <p>高性能工作（如游戏、视频编辑）：续航较短，通常 4-6 小时。</p>
+                    </div>
+                </div>
+
+                <!-- 接口 -->
+                <div class="component-card">
+                    <div class="image-container">
+                        <img src="../assets/笔记本接口.png" alt="笔记本电脑接口示意图" class="component-image">
+                    </div>
+                    <div class="text-container">
+                        <h4>🔌🔌 接口</h4>
+                        <p>连接外部设备的端口，接口决定了你能连接多少外设，如 USB 设备、键盘、显示器、耳机等。</p>
+                        <p>常见接口：</p>
+                        <p>USB Type-A：常见的传统 USB 接口，用于连接大多数外设。</p>
+                        <p>USB Type-C：更小、更现代的接口，支持更快的数据传输和充电。</p>
+                        <p>HDMI：视频输出接口，常用于连接外接显示器或电视。</p>
+                        <p>耳机/麦克风接口：通常用于连接耳机或麦克风。</p>
+                        <p>SD卡槽：用于读取存储卡，适合摄影师或视频编辑工作。</p>
+
+                    <p>适用场景：
+日常办公：基本的 USB 和 HDMI 接口。
+创意工作：USB Type-C、SD 卡槽、Thunderbolt 等。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>常见笔记本电脑类型</h3>
+            <div class="components-container">
+                <div class="component-card">
+                    <div class="text-container">
+                        <h4>💼💼 轻薄本</h4>
+                        <p>重量轻，便于携带，适合办公和日常使用，性能适中，续航较长。</p>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <div class="text-container">
+                        <h4>🎮🎮 游戏本</h4>
+                        <p>性能强劲，专为游戏设计，通常配备高刷新率屏幕和独立显卡，但较厚重。</p>
+                    </div>
+                </div>
+                
+                
+            </div>
+            
+            <h3>🎯🎯 如何选择适合自己的笔记本电脑</h3>
+            <p>选择笔记本电脑时应根据使用场景考虑：</p>
+            <ul>
+                <li>💰 预算范围：确定购买预算，不同价位对应不同配置水平</li>
+                <li>🎮🎮 主要用途：办公文档处理、编程开发、游戏娱乐、图形设计等</li>
+                <li>🎒🎒 便携性要求：经常携带外出建议选择轻薄本</li>
+                <li>⚡⚡ 性能需求：根据软件要求选择合适的CPU、内存和显卡</li>
+                <li>🖥🖥🖥️ 屏幕要求：考虑尺寸、分辨率和色彩准确性</li>
+                <li>🔋🔋 电池续航：移动办公需求高的用户应关注续航能力</li>
+                <li>🔧🔧 售后服务：选择有良好售后服务的品牌</li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p>📝📝 以上配置信息仅供参考，具体以官方发布为准</p>
+            <p>🌟 本网站旨在为用户提供电子设备配置对比参考</p>
+        </footer>
+    </div>
+    
+    <script>
+        // 切换电子设备类型标签
+        function switchTab(tabName) {
+            // 获取所有标签按钮
+            const tabs = document.querySelectorAll('.tab');
+            
+            // 移除所有标签的激活状态
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 根据点击的标签添加激活状态
+            const targetTab = event?.target;
+            if (targetTab) {
+                targetTab.classList.add('active');
+            } else {
+                // 如果没有事件对象（例如从其他函数调用），则手动选择对应标签
+                const tabToActivate = document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`);
+                if (tabToActivate) {
+                    tabToActivate.classList.add('active');
+                }
+            }
+            
+            // 获取所有内容区域
+            const phoneGuideSection = document.getElementById('phone-guide-section');
+            const phoneSection = document.getElementById('phone-section');
+            const laptopSection = document.getElementById('laptop-section');
+            const laptopGuideSection = document.getElementById('laptop-guide-section');
+            
+            // 隐藏所有区域 (添加淡出效果)
+            if (phoneGuideSection) {
+                phoneGuideSection.style.opacity = '0';
+                setTimeout(() => phoneGuideSection.style.display = 'none', 300);
+            }
+            if (phoneSection) {
+                phoneSection.style.opacity = '0';
+                setTimeout(() => phoneSection.style.display = 'none', 300);
+            }
+            if (laptopSection) {
+                laptopSection.style.opacity = '0';
+                setTimeout(() => laptopSection.style.display = 'none', 300);
+            }
+            if (laptopGuideSection) {
+                laptopGuideSection.style.opacity = '0';
+                setTimeout(() => laptopGuideSection.style.display = 'none', 300);
+            }
+            
+            // 根据标签显示对应区域 (添加淡入效果)
+            setTimeout(() => {
+                if (tabName === 'phone-guide') {
+                    if (phoneGuideSection) {
+                        phoneGuideSection.style.display = 'block';
+                        setTimeout(() => phoneGuideSection.style.opacity = '1', 50);
+                    }
+                    console.log('切换到了解手机配置页面');
+                } else if (tabName === 'phone') {
+                    if (phoneSection) {
+                        phoneSection.style.display = 'block';
+                        setTimeout(() => phoneSection.style.opacity = '1', 50);
+                    }
+                    console.log('切换到手机页面');
+                } else if (tabName === 'laptop') {
+                    if (laptopSection) {
+                        laptopSection.style.display = 'block';
+                        setTimeout(() => laptopSection.style.opacity = '1', 50);
+                    }
+                    console.log('切换到笔记本电脑页面');
+                } else if (tabName === 'laptop-guide') {
+                    if (laptopGuideSection) {
+                        laptopGuideSection.style.display = 'block';
+                        setTimeout(() => laptopGuideSection.style.opacity = '1', 50);
+                    }
+                    console.log('切换到了解电脑配置页面');
+                }
+            }, 300);
+        }
+
+        // 页面加载完成后，默认显示了解手机配置板块
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置"了解手机配置"标签为激活状态
+            const phoneGuideTab = document.querySelector('.tab[onclick="switchTab(\'phone-guide\')"]');
+            if (phoneGuideTab) {
+                phoneGuideTab.classList.add('active');
+            }
+            
+            // 显示了解手机配置板块
+            const phoneGuideSection = document.getElementById('phone-guide-section');
+            if (phoneGuideSection) {
+                phoneGuideSection.style.display = 'block';
+                phoneGuideSection.style.opacity = '1';
+            }
+            
+            // 确保调用switchTab来初始化显示
+            switchTab('phone-guide');
+        });
+
+        // 显示特定手机品牌区域
+        function showBrand(brand) {
+            // 移除所有手机品牌卡片的选中状态
+            const brandCards = document.querySelectorAll('#phone-section .brand-card');
+            brandCards.forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // 为当前点击的品牌卡片添加选中状态
+            const targetCard = event?.target?.closest('.brand-card');
+            if (targetCard) {
+                targetCard.classList.add('active');
+            }
+            
+            // 隐藏所有手机品牌区域 (添加淡出效果)
+            const brandSections = document.querySelectorAll('#phone-section .series-container');
+            brandSections.forEach(section => {
+                section.style.opacity = '0';
+                setTimeout(() => section.style.display = 'none', 300);
+            });
+            
+            // 显示选中的手机品牌区域 (添加淡入效果)
+            setTimeout(() => {
+                const selectedSection = document.getElementById(brand + '-section');
+                if (selectedSection) {
+                    selectedSection.style.display = 'block';
+                    setTimeout(() => selectedSection.style.opacity = '1', 50);
+                }
+            }, 300);
+            
+            console.log('显示 ' + brand + ' 手机品牌配置');
+        }
+
+        // 显示特定笔记本电脑品牌区域
+        function showLaptopBrand(brand) {
+            // 移除所有笔记本电脑品牌卡片的选中状态
+            const laptopBrandCards = document.querySelectorAll('#laptop-section .brand-card');
+            laptopBrandCards.forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // 为当前点击的品牌卡片添加选中状态
+            const targetCard = event?.target?.closest('.brand-card');
+            if (targetCard) {
+                targetCard.classList.add('active');
+            }
+            
+            // 隐藏所有笔记本电脑品牌区域 (添加淡出效果)
+            const laptopSections = document.querySelectorAll('#laptop-section .series-container');
+            laptopSections.forEach(section => {
+                section.style.opacity = '0';
+                setTimeout(() => section.style.display = 'none', 300);
+            });
+            
+            // 显示选中的笔记本电脑品牌区域 (添加淡入效果)
+            setTimeout(() => {
+                const selectedSection = document.getElementById(brand + '-laptop-section');
+                if (selectedSection) {
+                    selectedSection.style.display = 'block';
+                    setTimeout(() => selectedSection.style.opacity = '1', 50);
+                }
+            }, 300);
+            
+            console.log('显示 ' + brand + ' 笔记本电脑品牌配置');
+        }
+
+        // 添加平滑滚动效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为所有内部链接添加平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        window.scrollTo({
+                            top: target.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
