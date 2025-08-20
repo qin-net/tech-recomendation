@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI电子设备分析平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #f5f7fa;
+            --dark: #2c3e50;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* 顶部导航栏 */
+        .navbar {
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 20px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .nav-links i {
+            margin-right: 8px;
+        }
+        
+        /* 主内容区 */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary), #6a11cb);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .welcome-icon {
+            font-size: 3rem;
+            margin-right: 20px;
+        }
+        
+        .welcome-text h2 {
+            margin-bottom: 10px;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+        
+        /* 左侧评分区 */
+        .rating-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .rating-header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .rating-header h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .device-title {
+            text-align: center;
+            font-size: 1.8rem;
+            padding: 20px 0 10px;
+            color: var(--dark);
+        }
+        
+        .overall-score {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(to right, var(--accent), #ff6b6b);
+            color: white;
+            margin: 15px;
+            border-radius: 10px;
+        }
+        
+        .overall-value {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 5px 0;
+        }
+        
+        .scores-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 20px;
+        }
+        
+        .score-item {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .score-item:hover {
+            transform: translateY(-5px);
+            background: #e3f2fd;
+        }
+        
+        .score-label {
+            font-size: 0.9rem;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+        
+        .score-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .analysis-btn {
+            display: block;
+            width: 90%;
+            margin: 15px auto;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .analysis-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 右侧内容区 */
+        .details-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .details-header {
+            background: linear-gradient(to right, var(--secondary), #3a506b);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .details-header i {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        .details-content {
+            padding: 25px;
+            min-height: 500px;
+        }
+        
+        .input-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .input-device {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .input-device:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .ai-response {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .ai-response-header {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .ai-response-header i {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .ai-content {
+            line-height: 1.8;
+        }
+        
+        /* 功能区域 */
+        .features-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e6f7ff 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+            box-shadow: var(--shadow);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        /* 底部区域 */
+        .footer {
+            text-align: center;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+            color: var(--dark);
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links li {
+                margin-left: 10px;
+            }
+            
+            .nav-links a span {
+                display: none;
+            }
+            
+            .nav-links a i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+        }
+        
+        /* 新增样式：变窄的按钮 */
+        .submit-btn {
+            width: 160px; /* 比原来窄 */
+            padding: 15px 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .submit-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .submit-btn i {
+            margin-right: 8px;
+        }
+        
+        /* 加载动画 */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading .spinner {
+            display: inline-block;
+        }
+        
+        .loading .btn-text {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+   <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-microchip"></i>
+                <span>AI设备分析平台</span>
+            </div>
+            <ul class="nav-links">
+                <li>
+                    <a href="http://127.0.0.1:5000/analysis" class="active">
+                        <i class="fas fa-brain"></i>
+                        <span>智能分析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://127.0.0.1:5000/recommend">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>智能推荐</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="introduction">
+                        <i class="fas fa-server"></i>
+                        <span>硬件介绍</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <!-- 欢迎横幅 -->
+        <div class="welcome-banner">
+            <div class="welcome-icon">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="welcome-text">
+                <h2>专业电子设备AI分析系统</h2>
+                <p>基于DeepSeek AI的专业分析引擎，全方位评估电子设备性能，为您提供专业的设备分析报告</p>
+            </div>
+        </div>
+        
+        <!-- 内容网格布局 -->
+        <div class="content-grid">
+            <!-- 左侧评分区域 -->
+            <div class="rating-card">
+                <div class="rating-header">
+                    <h3>设备性能评分</h3>
+                </div>
+                {% if device %}
+                <h2 class="device-title">{{ device }}</h2>
+                <div class="overall-score">
+                    <div>综合评分</div>
+                    <div class="overall-value">{{ scores['总评'] }}</div>
+                    <div>满分10分制</div>
+                </div>
+                <div class="scores-grid">
+                    <div class="score-item">
+                        <div class="score-label">处理器性能</div>
+                        <div class="score-value">{{ scores['处理器性能'] }}</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">电池续航</div>
+                        <div class="score-value">{{ scores['电池续航'] }}</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">屏幕显示</div>
+                        <div class="score-value">{{ scores['屏幕显示'] }}</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">摄像头质量</div>
+                        <div class="score-value">{{ scores['摄像头质量'] }}</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">系统流畅度</div>
+                        <div class="score-value">{{ scores['系统流畅度'] }}</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">性价比</div>
+                        <div class="score-value">{{ scores['性价比'] }}</div>
+                    </div>
+                </div>
+                <a href="#" class="analysis-btn">
+                    <i class="fas fa-download"></i> 下载完整报告
+                </a>
+                {% else %}
+                <div class="device-title">未选择设备</div>
+                <div class="scores-grid">
+                    <div class="score-item">
+                        <div class="score-label">处理器性能</div>
+                        <div class="score-value">0.0</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">电池续航</div>
+                        <div class="score-value">0.0</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">屏幕显示</div>
+                        <div class="score-value">0.0</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">摄像头质量</div>
+                        <div class="score-value">0.0</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">系统流畅度</div>
+                        <div class="score-value">0.0</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">性价比</div>
+                        <div class="score-value">0.0</div>
+                    </div>
+                </div>
+                <div class="overall-score">
+                    <div>综合评分</div>
+                    <div class="overall-value">0.0</div>
+                    <div>请先提交设备名称</div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- 右侧内容区域 -->
+            <div class="details-card">
+                <div class="details-header">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>设备性能分析</h3>
+                </div>
+                <div class="details-content">
+                    <form method="POST" id="analysis-form">
+                        <div class="input-section">
+                            <input type="text" name="device" placeholder="输入设备名称（如：小米14、iPhone 15 Pro等）" class="input-device" required>
+                            <button type="submit" class="submit-btn" id="submit-btn">
+                                <div class="spinner"></div>
+                                <span class="btn-text">
+                                    <i class="fas fa-search"></i> 开始分析
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                    
+                    {% if device %}
+                    <div class="ai-response">
+                        <div class="ai-response-header">
+                            <i class="fas fa-robot"></i>
+                            <h4>AI分析报告</h4>
+                        </div>
+                        <div class="ai-content">
+                            <p>{{ ai_response | replace('\n', '<br>') | safe }}</p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="ai-response">
+                        <div class="ai-response-header">
+                            <i class="fas fa-info-circle"></i>
+                            <h4>使用说明</h4>
+                        </div>
+                        <div class="ai-content">
+                            <p>请在输入框中输入您要分析的电子设备名称，例如：</p>
+                            <ul style="margin-top: 15px; margin-left: 20px;">
+                                <li>智能手机：小米14、iPhone 15 Pro Max、Samsung Galaxy S24</li>
+                                <li>笔记本电脑：MacBook Pro M3、Dell XPS 15、ThinkPad X1 Carbon</li>
+                                <li>平板电脑：iPad Pro 2024、Huawei MatePad Pro</li>
+                                <li>其他设备：PlayStation 5、DJI Mavic 4 Pro</li>
+                            </ul>
+                            <p style="margin-top: 15px;">提交后，AI将对设备进行全面分析和评分，结果将在左侧显示。</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- 功能区域 -->
+        <div class="features-section">
+            <h3 style="text-align: center; color: var(--dark);">平台核心功能</h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h4>多维性能评估</h4>
+                    <p>通过6大维度对设备进行全方位评估，揭示设备真实性能</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4>AI深度分析</h4>
+                    <p>基于DeepSeek AI大模型，提供专业的性能分析和优化建议</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h4>可视化报告</h4>
+                    <p>清晰直观的数据可视化，助您快速理解设备性能特点</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>© 2025 AI电子设备分析平台 | 基于DeepSeek API | 专业设备性能分析系统</p>
+        <p style="margin-top: 10px; font-size: 0.9rem; color: #6c757d;">
+            <i class="fas fa-exclamation-circle"></i> 所有评分和分析结果基于AI算法生成，仅供参考
+        </p>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('analysis-form');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            if (form) {
+                form.addEventListener('submit', function() {
+                    // 添加loading类，显示加载动画
+                    submitBtn.classList.add('loading');
+                    
+                    // 禁用按钮防止重复提交
+                    submitBtn.disabled = true;
+                });
+            }
+        });
+    </script>
+</body>
+</html>

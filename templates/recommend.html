@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI电子产品推荐助手</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #f5f7fa;
+            --dark: #2c3e50;
+            --light-blue: #e3f2fd;
+            --gradient-start: #3498db;
+            --gradient-end: #8e44ad;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* 顶部导航栏 */
+        .navbar {
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0 20px;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            margin-right: 12px;
+            color: var(--accent);
+            font-size: 2rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+            position: relative;
+        }
+        
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .nav-links i {
+            margin-right: 8px;
+            font-size: 1.3rem;
+        }
+        
+        /* 主容器 */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        /* 聊天区域 */
+        .chat-section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .chat-header {
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 2.4rem;
+            color: var(--accent);
+        }
+        
+        .chat-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 1.15rem;
+            opacity: 0.9;
+        }
+        
+        /* 聊天容器 */
+        .chat-container {
+            padding: 25px;
+        }
+        
+        .message-container {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 20px;
+            height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        /* 消息样式 */
+        .message {
+            max-width: 85%;
+            padding: 15px 20px;
+            border-radius: 10px;
+            line-height: 1.6;
+            position: relative;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.4s ease;
+            font-size: 1.05rem;
+            transition: var(--transition);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-message {
+            background: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+            color: var(--dark);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .ai-message {
+            background: var(--light-blue);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .message-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .user-avatar, .ai-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            margin-right: 10px;
+        }
+        
+        .user-avatar {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .ai-avatar {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        /* 输入区域 */
+        .user-input-area {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .input-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .product-type {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .product-type label {
+            font-size: 1.05rem;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .type-options {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .type-option {
+            flex: 1;
+            padding: 15px 20px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 1.0rem;
+            font-weight: 600;
+            color: var(--secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .type-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .type-option.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .user-input {
+            display: flex;
+            gap: 15px;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            transition: var(--transition);
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .send-button {
+            padding: 0 30px;
+            height: 56px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        .send-button:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        /* 推荐区域 */
+        .recommendation-section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            color: var(--secondary);
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-type-tag {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            padding: 8px 20px;
+            background: var(--accent);
+            color: white;
+            font-size: 0.9rem;
+            border-radius: 25px;
+            font-weight: 600;
+            z-index: 10;
+        }
+        
+        .product-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .product-name i {
+            color: var(--primary);
+        }
+        
+        .brand-name {
+            font-weight: 800;
+        }
+        
+        .model-name {
+            font-weight: 600;
+        }
+        
+        .product-price {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 1.25rem;
+            background: rgba(231, 76, 60, 0.1);
+            padding: 8px 15px;
+            border-radius: 50px;
+        }
+        
+        .product-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .spec-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .spec-label {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .spec-value {
+            font-size: 1.05rem;
+            color: var(--dark);
+            font-weight: 500;
+        }
+        
+        .product-users {
+            font-size: 1.0rem;
+            padding: 12px 15px;
+            background: var(--light);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+            margin-top: 15px;
+            font-weight: 500;
+        }
+        
+        /* 加载动画 */
+        .loading {
+            padding: 18px;
+            text-align: center;
+            color: var(--primary);
+            font-size: 1.15rem;
+            font-weight: 500;
+            background: var(--light);
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+        
+        .loading i {
+            animation: spin 1s linear infinite;
+            margin-right: 12px;
+            font-size: 1.3em;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 页脚 */
+        .footer {
+            background: var(--secondary);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 40px 0 20px;
+            text-align: center;
+        }
+        
+        .footer p {
+            margin-bottom: 10px;
+        }
+        
+        .disclaimer {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 15px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .product-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+            
+            .message-container {
+                height: 350px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links a span {
+                display: none;
+            }
+            
+            .nav-links a i {
+                margin-right: 0;
+                font-size: 1.3rem;
+            }
+            
+            .type-options {
+                flex-direction: column;
+            }
+            
+            .user-input {
+                flex-direction: column;
+            }
+            
+            .send-button {
+                width: 100%;
+                padding: 0;
+            }
+            
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chat-header h1 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .chat-header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .product-name {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+        
+        /* 滚动条美化 */
+        .message-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .message-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+        
+        .message-container::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-microchip"></i>
+                <span>AI设备分析平台</span>
+            </div>
+            <ul class="nav-links">
+                <li>
+                    <a href="http://127.0.0.1:5000/analysis">
+                        <i class="fas fa-brain"></i>
+                        <span>智能分析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://127.0.0.1:5000/recommend" class="active">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>智能推荐</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="introduction">
+                        <i class="fas fa-server"></i>
+                        <span>硬件介绍</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <!-- 聊天区域 -->
+        <div class="chat-section">
+            <header class="chat-header">
+                <div class="logo-container">
+                    <i class="fas fa-robot logo-icon"></i>
+                    <h1>AI电子产品推荐助手</h1>
+                </div>
+                <div class="tagline">智能推荐最符合您需求的电子产品</div>
+            </header>
+
+            <div class="chat-container">
+                <div id="chat-history" class="message-container">
+                    <!-- 聊天历史将动态显示在这里 -->
+                </div>
+                
+                <div class="user-input-area">
+                    <div class="input-controls">
+                        <div class="product-type">
+                            <label>推荐类型:</label>
+                            <div class="type-options">
+                                <button class="type-option active" data-type="phone">手机</button>
+                                <button class="type-option" data-type="laptop">电脑</button>
+                            </div>
+                        </div>
+                        
+                        <div class="user-input">
+                            <input type="text" id="user-preference" placeholder="请输入您的需求（如：预算3000元的拍照手机）">
+                            <button id="get-recommendation" class="send-button">
+                                <i class="fas fa-magic"></i> 获取推荐
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 推荐区域 -->
+        <div class="recommendation-section">
+            <h2 class="section-title">推荐结果</h2>
+            <div id="recommendation-container" class="product-grid">
+                <!-- 推荐卡片将动态添加到此处 -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2025 AI电子设备分析平台 | 基于DeepSeek API | 专业设备性能分析系统</p>
+        <p class="disclaimer">注：AI推荐仅供参考，购买前请核实最新产品信息</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 元素引用
+            const chatHistory = document.getElementById('chat-history');
+            const recommendationContainer = document.getElementById('recommendation-container');
+            const userPreferenceInput = document.getElementById('user-preference');
+            const getRecommendationBtn = document.getElementById('get-recommendation');
+            const typeOptions = document.querySelectorAll('.type-option');
+            
+            // 推荐类型切换
+            typeOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    typeOptions.forEach(o => o.classList.remove('active'));
+                    option.classList.add('active');
+                });
+            });
+            
+            // 添加用户消息
+            function addUserMessage(message) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', 'user-message');
+                
+                const header = document.createElement('div');
+                header.classList.add('message-header');
+                
+                const icon = document.createElement('div');
+                icon.classList.add('user-avatar');
+                icon.innerHTML = '<i class="fas fa-user"></i>';
+                
+                const content = document.createElement('div');
+                content.classList.add('message-content');
+                content.textContent = message;
+                
+                header.appendChild(icon);
+                header.appendChild(content);
+                messageElement.appendChild(header);
+                chatHistory.appendChild(messageElement);
+                
+                // 滚动到底部
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+            
+            // 添加AI消息
+            function addAIMessage(message) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', 'ai-message');
+                
+                const header = document.createElement('div');
+                header.classList.add('message-header');
+                
+                const icon = document.createElement('div');
+                icon.classList.add('ai-avatar');
+                icon.innerHTML = '<i class="fas fa-robot"></i>';
+                
+                const content = document.createElement('div');
+                content.classList.add('message-content');
+                content.textContent = message;
+                
+                header.appendChild(icon);
+                header.appendChild(content);
+                messageElement.appendChild(header);
+                chatHistory.appendChild(messageElement);
+                
+                // 滚动到底部
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+            
+            // 显示加载状态
+            function showLoading() {
+                const loadingElement = document.createElement('div');
+                loadingElement.classList.add('loading');
+                loadingElement.innerHTML = '<i class="fas fa-spinner"></i> AI正在分析您的需求，请稍候...';
+                chatHistory.appendChild(loadingElement);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+                return loadingElement;
+            }
+            
+            // 清除推荐卡片
+            function clearRecommendations() {
+                recommendationContainer.innerHTML = '';
+            }
+            
+            // 清理文本中的Markdown格式
+            function cleanMarkdown(text) {
+                if (!text) return text;
+                return text
+                    .replace(/\*\*/g, '')    // 移除加粗
+                    .replace(/```/g, '')     // 移除代码块
+                    .replace(/`/g, '')       // 移除代码标记
+                    .replace(/#/g, '')       // 移除标题
+                    .replace(/\*/g, '')     // 移除列表符号
+                    .replace(/\(.*?$/g, '') // 移除括号内容
+                    .replace(/$$.*?$$/g, ''); // 移除方括号内容
+            }
+            
+            // 添加推荐卡片 - 解决型号缺失问题
+            function addProductRecommendation(product) {
+                const card = document.createElement('div');
+                card.classList.add('product-card');
+                
+                // 产品类型标签
+                const typeTag = document.createElement('div');
+                typeTag.classList.add('product-type-tag');
+                typeTag.textContent = product.product_type === 'phone' ? '手机' : '电脑';
+                card.appendChild(typeTag);
+                
+                // 产品标题区域
+                const titleDiv = document.createElement('div');
+                titleDiv.classList.add('product-title');
+                
+                // 强化的型号显示 - 确保品牌和型号分离
+                const nameDiv = document.createElement('div');
+                nameDiv.classList.add('product-name');
+                
+                // 添加品牌图标
+                const brandIcon = document.createElement('i');
+                brandIcon.classList.add('fas', product.product_type === 'phone' ? 'fa-mobile-alt' : 'fa-laptop');
+                nameDiv.appendChild(brandIcon);
+                
+                // 尝试分离品牌和型号
+                const fullName = product.name.trim();
+                const brandSpan = document.createElement('span');
+                brandSpan.classList.add('brand-name');
+                
+                const modelSpan = document.createElement('span');
+                modelSpan.classList.add('model-name');
+                
+                // 智能分割品牌和型号
+                if (fullName.includes(' ')) {
+                    // 如果有空格，分割为品牌和型号
+                    const parts = fullName.split(' ');
+                    brandSpan.textContent = parts[0];
+                    modelSpan.textContent = parts.slice(1).join(' ');
+                } else if (fullName.match(/[a-zA-Z][a-z]+/)) {
+                    // 提取英文品牌部分
+                    const brandMatch = fullName.match(/[a-zA-Z]+/);
+                    if (brandMatch) {
+                        brandSpan.textContent = brandMatch[0];
+                        modelSpan.textContent = fullName.replace(brandMatch[0], '');
+                    } else {
+                        brandSpan.textContent = fullName.substring(0, 2);
+                        modelSpan.textContent = fullName.substring(2);
+                    }
+                } else {
+                    // 默认显示完整名称
+                    modelSpan.textContent = fullName;
+                }
+                
+                nameDiv.appendChild(brandSpan);
+                nameDiv.appendChild(modelSpan);
+                
+                // 价格区域
+                const priceDiv = document.createElement('div');
+                priceDiv.classList.add('product-price');
+                
+                // 确保价格显示正确
+                let priceText = product.price || '';
+                if (!priceText.includes('~') && !priceText.includes('至') && !priceText.includes('-')) {
+                    // 尝试添加连接符
+                    const prices = priceText.match(/\d+/g);
+                    if (prices && prices.length > 1) {
+                        priceText = prices[0] + '~' + prices[1] + '元';
+                    } else if (prices && prices.length === 1) {
+                        priceText = prices[0] + '元';
+                    }
+                }
+                
+                priceDiv.textContent = priceText || '价格信息待添加';
+                priceDiv.innerHTML = priceDiv.innerHTML.replace('元', '<span class="yuan">元</span>');
+                
+                titleDiv.appendChild(nameDiv);
+                titleDiv.appendChild(priceDiv);
+                card.appendChild(titleDiv);
+                
+                // 规格参数区域
+                if (product.specs) {
+                    const specsDiv = document.createElement('div');
+                    specsDiv.classList.add('product-specs');
+                    
+                    // 固定顺序显示关键规格
+                    const specsOrder = ['处理器', '显卡', '内存', '存储', '屏幕', '电池', '重量'];
+                    
+                    specsOrder.forEach(key => {
+                        if (product.specs[key]) {
+                            const specItem = document.createElement('div');
+                            specItem.classList.add('spec-item');
+                            
+                            const specLabel = document.createElement('div');
+                            specLabel.classList.add('spec-label');
+                            specLabel.textContent = key + ':';
+                            
+                            const specValue = document.createElement('div');
+                            specValue.classList.add('spec-value');
+                            specValue.textContent = cleanMarkdown(product.specs[key]);
+                            
+                            specItem.appendChild(specLabel);
+                            specItem.appendChild(specValue);
+                            specsDiv.appendChild(specItem);
+                        }
+                    });
+                    
+                    card.appendChild(specsDiv);
+                }
+                
+                // 适合人群
+                if (product.specs && product.specs['适用人群']) {
+                    const usersDiv = document.createElement('div');
+                    usersDiv.classList.add('product-users');
+                    
+                    const usersLabel = document.createElement('strong');
+                    usersLabel.textContent = '适用人群: ';
+                    
+                    const usersText = document.createElement('span');
+                    usersText.textContent = cleanMarkdown(product.specs['适用人群']);
+                    
+                    usersDiv.appendChild(usersLabel);
+                    usersDiv.appendChild(usersText);
+                    card.appendChild(usersDiv);
+                }
+                
+                recommendationContainer.appendChild(card);
+            }
+            
+            // 添加选购建议
+            function addTips(tips) {
+                const tipsDiv = document.createElement('div');
+                tipsDiv.classList.add('product-tips');
+                
+                const tipsLabel = document.createElement('div');
+                tipsLabel.classList.add('tips-label');
+                tipsLabel.textContent = '选购建议：';
+                
+                const tipsContent = document.createElement('div');
+                tipsContent.classList.add('tips-content');
+                
+                // 处理带项目符号的建议文本
+                if (tips) {
+                    const cleanTips = cleanMarkdown(tips)
+                        .split(/\n|\. /)
+                        .filter(tip => tip.trim().length > 5);
+                    
+                    cleanTips.forEach(item => {
+                        if (item.trim()) {
+                            const tipItem = document.createElement('div');
+                            tipItem.classList.add('tip-item');
+                            tipItem.innerHTML = '• ' + item.trim();
+                            tipsContent.appendChild(tipItem);
+                        }
+                    });
+                }
+                
+                tipsDiv.appendChild(tipsLabel);
+                tipsDiv.appendChild(tipsContent);
+                recommendationContainer.appendChild(tipsDiv);
+            }
+            
+            // 获取产品推荐
+            function getRecommendation() {
+                const preference = userPreferenceInput.value.trim();
+                if (!preference) return;
+                
+                // 添加用户消息
+                addUserMessage(preference);
+                userPreferenceInput.value = '';
+                
+                // 显示加载状态
+                const loadingElement = showLoading();
+                
+                // 获取推荐类型
+                const productType = document.querySelector('.type-option.active').getAttribute('data-type');
+                
+                // 清除之前的推荐
+                clearRecommendations();
+                
+                // 发送请求到后端API
+                fetch('/api/recommend', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        preference: preference,
+                        product_type: productType
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // 移除加载状态
+                    chatHistory.removeChild(loadingElement);
+                    
+                    if (data.error) {
+                        addAIMessage(`错误: ${data.error}`);
+                    } 
+                    else if (data.message) {
+                        addAIMessage(data.message);
+                    } 
+                    else if (data.recommendations && data.recommendations.length > 0) {
+                        // 添加AI确认消息
+                        addAIMessage(`根据您的需求"${preference}"，我为您推荐以下${productType === 'phone' ? '手机' : '电脑'}产品：`);
+                        
+                        // 在推荐区域显示产品卡片
+                        data.recommendations.forEach(product => {
+                            // 添加产品类型信息
+                            product.product_type = productType;
+                            addProductRecommendation(product);
+                        });
+                        
+                        // 添加选购建议 - 单独渲染
+                        if (data.tips) {
+                            addTips(data.tips);
+                        }
+                    } 
+                    else {
+                        addAIMessage("未找到符合您需求的产品，请尝试调整需求条件");
+                    }
+                })
+                .catch(error => {
+                    // 移除加载状态
+                    chatHistory.removeChild(loadingElement);
+                    addAIMessage(`请求失败: ${error.message}`);
+                });
+            }
+            
+            // 绑定事件
+            getRecommendationBtn.addEventListener('click', getRecommendation);
+            userPreferenceInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') getRecommendation();
+            });
+            
+            // 初始欢迎消息
+            setTimeout(() => {
+                addAIMessage("您好！我可以根据您的需求推荐合适的电子产品。请告诉我您的需求（如预算、用途等）");
+            }, 500);
+        });
+    </script>
+</body>
+</html>
